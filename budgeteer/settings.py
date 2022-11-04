@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from datetime import timedelta
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -80,11 +83,11 @@ WSGI_APPLICATION = "budgeteer.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "grwijzjt",
-        "USER": "grwijzjt",
-        "PASSWORD": "lqSFdS_lHbj7NJmG7MK0BIgcuusUQhV8",
-        "HOST": "peanut.db.elephantsql.com",
-        "PORT": 5432
+        "NAME": os.getenv('DB_NAME'),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST"),
+        "PORT": os.getenv('DB_PORT')
     }
 }
 
@@ -146,4 +149,4 @@ SIMPLE_JWT = {
 
 # Celery for windows
 os.environ.setdefault('FORKED_BY_MULTIPROCESSING', '1')
-CELERY_BROKER_URL = 'amqps://gkxjpaup:8Vl9U0kStBBrR-DAB80AXu7vacfIDyd_@whale.rmq.cloudamqp.com/gkxjpaup'
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')

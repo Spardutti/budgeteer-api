@@ -1,0 +1,2 @@
+# run celery worker
+celery -A budgeteer worker --loglevel=INFO
