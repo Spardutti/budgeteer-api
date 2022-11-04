@@ -60,10 +60,9 @@ class MonthlyIncomeSerializer(serializers.ModelSerializer):
         fields = '__all__'
     
     def create(self, validated_data):
-        user = self.context
+        user = self.context['user']
         get_user = CustomUser.objects.get(pk=user)
-        # TODO test this get user
-        print("GET USER", get_user)
-        category = MonthlyIncome.objects.create(user=user, **validated_data)
+      
+        category = MonthlyIncome.objects.create(user=get_user, **validated_data)
         
         return category

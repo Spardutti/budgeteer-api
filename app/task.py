@@ -2,6 +2,8 @@ from celery import shared_task
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import WeeklyExpenseSerializer, MonthlyIncomeSerializer
+from datetime import datetime
+from .utils import week_of_month
 
 @shared_task
 def create_weekly_expense(user_id, category_id):
@@ -14,8 +16,13 @@ def create_weekly_expense(user_id, category_id):
 
 @shared_task
 def create_monthly_income(user_id, user_amount):
-    data = {'user': user_id, 'amount': user_amount}
-    serializer = MonthlyIncomeSerializer(data=data)
+    today = datetime.now()
+    year = today.year
+    month = today.month
+    week = week_of_month()
+    data = {'amount': user_amount, 'year': year, 'month': month, 'week': week}
+    context = {'user': user_id}
+    serializer = MonthlyIncomeSerializer(data=data, context=context)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
