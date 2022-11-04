@@ -33,7 +33,7 @@ services:
         # env_file: # - .env
         build:
             context: .
-            dockerfile: ./Dockerfile-development
+            dockerfile: ./Dockerfile
         command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
         # command: sh -c "python manage.py wait_for_db && python manage.py migrate && python manage.py runserver 0.0.0.0:3000"
         ports:
@@ -54,7 +54,7 @@ services:
         #   - .env
         build:
             context: .
-            dockerfile: ./docker/Dockerfile-development
+            dockerfile: ./Dockerfile
         command: celery -A budgeteer worker --loglevel=INFO #celery -A purchhist.celery_app worker -P eventlet -c 20 -Q notifications_dev -l info -n notifications -E
         depends_on:
             # - redis
