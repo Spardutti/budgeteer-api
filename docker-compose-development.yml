@@ -6,15 +6,7 @@ services:
         image: postgres:12.8-alpine
         restart: always
         # env_file: # - .env
-        # volumes:
-        #   - db_data:/var/lib/postgresql/data
-        #   - ./pg_seed:/pg_seed
-        # environment:
-        #   ENGINE: django.db.backends.postgresql
-        #   NAME: grwijzjt
-        #   USER: grwijzjt
-        #   PASSWORD: lqSFdS_lHbj7NJmG7MK0BIgcuusUQhV8
-        #   HOST: peanut.db.elephantsql.com
+
         environment:
             POSTGRES_USER: "{DB_USER}"
             POSTGRES_PASSWORD: "{DB_PASSWORD}"
@@ -22,12 +14,7 @@ services:
         ports:
             - 5432:5432
 
-    # redis:
-    #   image: redis:5-alpine
-    #   env_file:
-    #     - .env
-    #   ports:
-    #     - 6379:6379
+   
 
     app:
         # env_file: # - .env
@@ -35,17 +22,17 @@ services:
             context: .
             dockerfile: ./Dockerfile
         command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
-        # command: sh -c "python manage.py wait_for_db && python manage.py migrate && python manage.py runserver 0.0.0.0:3000"
+        
         ports:
             - 8000:8000
             # depends_on:
             #   - db
-            # - redis
+            
         volumes:
             - .:/app
         environment:
             PYTHONPATH: /app
-        #debugging with pdb
+       
         stdin_open: true
         tty: true
 
@@ -55,178 +42,8 @@ services:
         build:
             context: .
             dockerfile: ./Dockerfile
-        command: celery -A budgeteer worker --loglevel=INFO #celery -A purchhist.celery_app worker -P eventlet -c 20 -Q notifications_dev -l info -n notifications -E
+        command: celery -A budgeteer worker --loglevel=INFO 
         depends_on:
-            # - redis
             - app
         volumes:
             - .:/app
-
-#   celery-worker-download-emails:
-#     env_file:
-#       - .env
-#     build:
-#       context: .
-#       dockerfile: ./docker/Dockerfile-development
-#     command: celery -A purchhist.celery_app worker -P eventlet -c 40 -Q download_emails_dev -l info -n download-emails -E
-#     depends_on:
-#       - redis
-#       - app
-#     volumes:
-#       - .:/app
-
-#   celery-worker-parse:
-#     env_file:
-#       - .env
-#     build:
-#       context: .
-#       dockerfile: ./docker/Dockerfile-development
-#     command: celery -A purchhist.celery_app worker -P eventlet -c 20 -Q parse_dev -l info -n parse -E
-#     depends_on:
-#       - redis
-#       - app
-#     volumes:
-#       - .:/app
-#     #debugging with pdb
-#     stdin_open: true
-#     tty: true
-
-#   celery-worker-shipping:
-#     env_file:
-#       - .env
-#     build:
-#       context: .
-#       dockerfile: ./docker/Dockerfile-development
-#     command: celery -A purchhist.celery_app worker -P eventlet -c 20 -Q shipping_dev -l info -n shipping -E
-#     depends_on:
-#       - redis
-#       - app
-#     volumes:
-#       - .:/app
-
-#   celery-worker-parse-onboarding:
-#     env_file:
-#       - .env
-#     build:
-#       context: .
-#       dockerfile: ./docker/Dockerfile-development
-#     command: celery -A purchhist.celery_app worker -P eventlet -c 20 -Q parse_onboarding_dev -l info -n parse-onboarding -E
-#     depends_on:
-#       - redis
-#       - app
-#     volumes:
-#       - .:/app
-
-#   celery-worker-parse-update:
-#     env_file:
-#       - .env
-#     build:
-#       context: .
-#       dockerfile: ./docker/Dockerfile-development
-#     command: celery -A purchhist.celery_app worker -P eventlet -c 20 -Q parse_update_dev -l info -n parse-update -E
-#     depends_on:
-#       - redis
-#       - app
-#     volumes:
-#       - .:/app
-
-#   celery-worker-parse-events:
-#     env_file:
-#       - .env
-#     build:
-#       context: .
-#       dockerfile: ./docker/Dockerfile-development
-#     command: celery -A purchhist.celery_app worker -P eventlet -c 20 -Q parse_events_dev -l info -n parse-events -E
-#     depends_on:
-#       - redis
-#       - app
-#     volumes:
-#       - .:/app
-
-#   celery-worker-default:
-#     env_file:
-#       - .env
-#     build:
-#       context: .
-#       dockerfile: ./docker/Dockerfile-development
-#     command: celery -A purchhist.celery_app worker -P eventlet -c 10 -Q default_dev -l info -n default -E
-#     depends_on:
-#       - redis
-#       - app
-#     volumes:
-#       - .:/app
-
-#   celery-beat:
-#     env_file:
-#       - .env
-#     build:
-#       context: .
-#       dockerfile: ./docker/Dockerfile-development
-#     command: celery -A purchhist.celery_app beat -S redbeat.RedBeatScheduler -l info
-#     depends_on:
-#       - redis
-#       - app
-#     volumes:
-#       - .:/app
-
-#   # flower:
-#   #   image: mher/flower:0.9.5
-#   #   env_file:
-#   #     - .env
-#   #   command: celery flower --port=5555
-#   #   depends_on:
-#   #     - redis
-#   #     - app
-#   #     - celery-worker-notifications
-#   #     - celery-worker-download-emails
-#   #     - celery-worker-parse
-#   #     - celery-worker-shipping
-#   #     - celery-worker-parse-onboarding
-#   #     - celery-worker-parse-update
-#   #     - celery-worker-parse-events
-#   #     - celery-worker-default
-#   #   volumes:
-#   #     - db_flower:/app
-#   #   ports:
-#   #     - 5555:5555
-#   #   environment:
-#   #     CELERY_BROKER_URL: sqs://sqs:sqs@sqs:9324/
-#   #     CELERY_RESULT_BACKEND: redis://redis
-
-#   sqs:
-#     image: roribio16/alpine-sqs
-#     ports:
-#       - 9324:9324
-#       - 9325:9325
-#     volumes:
-#       - ./config/elasticmq.conf:/opt/config/elasticmq.conf
-
-# volumes:
-#   db_data:
-#     #db_flower:
-
-#     # grafana:
-#     #   image: grafana/grafana
-#     #   depends_on:
-#     #     - prometheus
-#     #   ports:
-#     #     - 3000:3000
-
-#     # celery-worker-local:
-#     #   env_file:
-#     #     - .env
-#     #   build:
-#     #     context: .
-#     #     dockerfile: ./docker/Dockerfile-development
-#     #   command: celery -A purchhist.celery_app worker -P eventlet -c 200 -Q notifications,download_emails,parse,shipping,default -l info
-#     #   depends_on:
-#     #     - redis
-#     #     - web_migrations./÷.,
-
-#     # fluentd:
-#     #   build: ./fluentd/
-#     #   volumes:
-#     #     - ./logs:/fluentd/log
-#     #   ports:
-#     #     - 24224:24224
-#     #     - 24224:24224/udpcls
