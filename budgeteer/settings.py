@@ -30,7 +30,7 @@ SECRET_KEY = "django-insecure-yx&mx8khhcu7nb9+^f0x9*_!2x1kjww!44o^+tg8csl_d#jg(^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://budgeteer-dockerless.onrender.com/']
+ALLOWED_HOSTS = ['budgeteer-dockerless.onrender.com']
 
 
 # Application definition
