@@ -30,7 +30,7 @@ SECRET_KEY = "django-insecure-yx&mx8khhcu7nb9+^f0x9*_!2x1kjww!44o^+tg8csl_d#jg(^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['budgeteer-dockerless.onrender.com']
+ALLOWED_HOSTS = ['budgeteer-dockerless.onrender.com', 'localhost']
 
 
 # Application definition
@@ -87,7 +87,7 @@ DATABASES = {
         "USER": os.getenv("DB_USER"),
         "PASSWORD": os.getenv("DB_PASSWORD"),
         "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv('DB_PORT')
+        # "PORT": os.getenv('DB_PORT')
     }
 }
 
