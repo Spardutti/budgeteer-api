@@ -29,9 +29,14 @@ class WeeklyExpenseAdmin(admin.ModelAdmin):
 
 class MonthlyIncomeAdmin(admin.ModelAdmin):
     fieldsets =  [
+        ('Id', {'fields': ['id']}),
         ('User', {'fields': ['user']}),
-        ('Amount', {'fields': ['amount']})
+        ('Amount', {'fields': ['amount']}),
+        ('Week', {'fields':['week']}),
+        ('Month', {'fields':['month']}),
+        ('Year', {'fields':['year']})
     ]
+    list_display = ('id', 'user', 'amount', 'week', 'month', 'year')
     
 admin.site.register(CustomUser, UserAdmin)
 admin.site.register(WeeklyCategory, WeeklyCategoryAdmin)

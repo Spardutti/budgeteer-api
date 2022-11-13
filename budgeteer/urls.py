@@ -23,13 +23,15 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     # Users
     path('users/', views.UserList.as_view()),
-    path('users/<int:pk>/', views.UserDetail.as_view()),
+    path('user/<int:pk>/', views.UserDetail.as_view()),
     # Categories
     path('categories/', views.WeeklyCategoryList.as_view()),
+    path('category/<int:pk>', views.WeeklyCategoryDetail.as_view()),
     # Expenses
     path('expenses/', views.WeeklyExpenseList.as_view()),
     # Monthly Income
     path('income/', views.MonthlyIncomeList.as_view()),
+    path('income/<int:pk>', views.MonthlyIncomeDetail.as_view()),
     # Token
     path("token/", TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

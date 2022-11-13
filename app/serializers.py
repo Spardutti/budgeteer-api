@@ -23,13 +23,13 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class WeeklyCategorySerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source='user.username')
+    user = serializers.PrimaryKeyRelatedField(many=False, read_only=True, required=False, source='user.username')
     week = serializers.ReadOnlyField()
     year = serializers.ReadOnlyField()
     month = serializers.ReadOnlyField()
     class Meta:
         model = WeeklyCategory
-        fields = ['name', 'user', 'week', 'month', 'week', 'amount', 'year']
+        fields = ['id', 'name', 'user', 'week', 'month', 'week', 'amount', 'year']
 
     def create(self, validated_data):
         user = self.context
