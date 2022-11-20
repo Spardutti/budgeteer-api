@@ -30,8 +30,8 @@ class UserDetail(APIView):
         except CustomUser.DoesNotExist:
             raise Http404
     
-    def get(self, request, pk, format=None):
-        user = self.get_user(pk)
+    def get(self, request, format=None):
+        user = self.get_user(request.user.id)
         serializer = UserSerializer(user)
         # create_monthly_income_login.delay(user.id, user.amount)
         # create_weekly_category_login.delay(user.id)

@@ -23,7 +23,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     # Users
     path('users/', views.UserList.as_view()),
-    path('user/<int:pk>/', views.UserDetail.as_view()),
+    path('user/', views.UserDetail.as_view()),
     # Categories
     path('categories/', views.WeeklyCategoryList.as_view()),
     path('category/<int:pk>', views.WeeklyCategoryDetail.as_view()),
