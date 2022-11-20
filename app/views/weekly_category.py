@@ -39,7 +39,8 @@ class WeeklyCategoryDetail(APIView):
     
     def put(self, request, pk, format=None):
         category = self.get_category(pk)
-        update_expense_income_amount.delay(category_id=category.id, category_week=category.week, category_year=category.year, category_month=category.month, amount=request.data['amount'])
+        # update_expense_income_amount.delay(category_id=category.id, category_week=category.week, category_year=category.year, category_month=category.month, amount=request.data['amount'])
+        update_expense_income_amount(category_id=category.id, category_week=category.week, category_year=category.year, category_month=category.month, amount=request.data['amount'])
         serializer = WeeklyCategorySerializer(category, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
