@@ -14,7 +14,7 @@ class WeeklyCategoryAdmin(admin.ModelAdmin):
         ('Amount', {'fields': ['amount']}),
         ('Date', {'fields': ['year', 'month', 'week']})
     ]
-    list_display = ('name', 'user', 'amount')
+    list_display = ('name', 'user', 'amount', 'week')
 
     list_filter = ['name', 'user', 'week']
 

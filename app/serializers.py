@@ -5,10 +5,9 @@ from datetime import datetime
 from .utils import week_of_month
 
 class UserSerializer(serializers.ModelSerializer):
-    categories = serializers.PrimaryKeyRelatedField(many=True, queryset=WeeklyCategory.objects.all(), required=False)
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'categories', 'password', 'amount']
+        fields = ['id', 'username',  'password', 'amount']
         extra_kwargs = {'password': {'write_only': True}}
 
 

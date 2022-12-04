@@ -11,7 +11,7 @@ class WeeklyCategoryList(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request, format=None):
-        weekly_categories = WeeklyCategory.objects.all()
+        weekly_categories = WeeklyCategory.objects.filter(user=request.user)
         serializer = WeeklyCategorySerializer(weekly_categories, many=True)
         return Response(serializer.data)
     

@@ -59,22 +59,30 @@ def create_monthly_income_login(user_id, user_amount):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # @shared_task
-def create_weekly_category_login(user_id):
+def create_weekly_category_login(user):
     today = datetime.now()
     month = today.month
     year = today.year
     week = week_of_month()
-    weekly_categories = WeeklyCategory.objects.filter(user=user_id)
+    weekly_categories = WeeklyCategory.objects.filter(user=user)
     if len(weekly_categories) > 0:
+        names_to_skip = []
         for category in weekly_categories:
-            if category.month != month and category.week != week and category.year != year:
+            if category.month == month and category.week == week and category.year == year:
+                names_to_skip.append(category.name)
+        for category in weekly_categories:
+            if category.name in names_to_skip:
+                continue
+            if category.month != month or category.week != week or category.year != year and category.name:
                 data = { 'year': year, 'month': month, 'week': week, 'name': category.name }
-                context = {'user': user_id}
+                context =  user
                 serializer = WeeklyCategorySerializer(data=data, context=context)
                 if serializer.is_valid():
                     serializer.save()
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                    continue
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response( status=status.HTTP_200_CREATED)
+        return
     return Response(status=status.HTTP_200_OK)
 
 

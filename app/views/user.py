@@ -36,7 +36,7 @@ class UserDetail(APIView):
         # create_monthly_income_login.delay(user.id, user.amount)
         # create_weekly_category_login.delay(user.id)
         create_monthly_income_login(user.id, user.amount)
-        create_weekly_category_login(user.id)
+        create_weekly_category_login(user)
         return Response(serializer.data)
     
     def put(self, request, pk, format=None):
