@@ -7,7 +7,7 @@ from .utils import week_of_month
 from datetime import datetime
 from .models import MonthlyIncome, WeeklyCategory, WeeklyExpense
 
-@shared_task
+# @shared_task
 def create_weekly_expense(user_id, category_id):
     data = {'user': user_id, 'weekly_category': category_id, 'amount': 0}
     serializer = WeeklyExpenseSerializer(data=data)
@@ -16,7 +16,7 @@ def create_weekly_expense(user_id, category_id):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@shared_task
+# @shared_task
 def create_monthly_income(user_id, user_amount):
     today = datetime.now()
     year = today.year
@@ -30,7 +30,7 @@ def create_monthly_income(user_id, user_amount):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@shared_task
+# @shared_task
 def update_expense_income_amount(category_id, category_week, category_year, category_month, amount):
     weekly_expense = WeeklyExpense.objects.get(weekly_category=category_id)
     monthly_income = MonthlyIncome.objects.get(user=weekly_expense.user.id, week=category_week, year=category_year, month=category_month)
@@ -41,7 +41,7 @@ def update_expense_income_amount(category_id, category_week, category_year, cate
     monthly_income.save()
     return status.HTTP_200_OK
 
-@shared_task
+# @shared_task
 def create_monthly_income_login(user_id, user_amount):
     today = datetime.now()
     month = today.month
@@ -58,7 +58,7 @@ def create_monthly_income_login(user_id, user_amount):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@shared_task
+# @shared_task
 def create_weekly_category_login(user_id):
     today = datetime.now()
     month = today.month

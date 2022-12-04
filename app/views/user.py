@@ -33,8 +33,10 @@ class UserDetail(APIView):
     def get(self, request, pk, format=None):
         user = self.get_user(pk)
         serializer = UserSerializer(user)
-        create_monthly_income_login.delay(user.id, user.amount)
-        create_weekly_category_login.delay(user.id)
+        # create_monthly_income_login.delay(user.id, user.amount)
+        create_monthly_income_login(user.id, user.amount)
+        # create_weekly_category_login.delay(user.id)
+        create_weekly_category_login(user.id)
         return Response(serializer.data)
     
     def put(self, request, pk, format=None):
