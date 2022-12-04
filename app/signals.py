@@ -14,7 +14,7 @@ def create_weekly_expense_signal(sender, instance, created,**kwargs):
 
 @receiver(signals.post_save, sender=CustomUser, dispatch_uid="create monthly income")
 def create_user_monthly_income(sender, instance, created, **kwargs):
-    if created:
+    if created and not instance.is_staff:
         # create_monthly_income.delay(instance.id, instance.amount)
         create_monthly_income(instance.id, instance.amount)
 
