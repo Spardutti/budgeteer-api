@@ -81,8 +81,8 @@ def create_weekly_category_login(user):
                     serializer.save()
                     continue
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response( status=status.HTTP_200_CREATED)
-        return
+        return Response( status=status.HTTP_200_OK)
+        
     return Response(status=status.HTTP_200_OK)
 
 
