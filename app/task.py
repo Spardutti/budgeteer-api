@@ -73,7 +73,8 @@ def create_weekly_category_login(user):
         for category in weekly_categories:
             if category.name in names_to_skip:
                 continue
-            if category.month != month or category.week != week or category.year != year and category.name:
+            if category.month != month or category.week != week or category.year != year:
+                names_to_skip.append(category.name)
                 data = { 'year': year, 'month': month, 'week': week, 'name': category.name }
                 context =  user
                 serializer = WeeklyCategorySerializer(data=data, context=context)
