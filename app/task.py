@@ -31,9 +31,9 @@ def create_monthly_income(user_id, user_amount):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # @shared_task
-def update_expense_income_amount(category_id, category_week, category_year, category_month, amount):
-    weekly_expense = WeeklyExpense.objects.get(weekly_category=category_id)
-    monthly_income = MonthlyIncome.objects.get(user=weekly_expense.user.id, week=category_week, year=category_year, month=category_month)
+def update_expense_income_amount(category_id,  category_year, category_month, amount):
+    weekly_expense = WeeklyExpense.objects.filter(weekly_category=category_id).first()
+    monthly_income = MonthlyIncome.objects.filter(user=weekly_expense.user.id,  year=category_year, month=category_month).first()
     weekly_expense.amount += amount
     monthly_income.amount -=amount
 

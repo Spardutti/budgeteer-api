@@ -33,4 +33,3 @@ class MonthlyIncome(models.Model):
     amount = models.IntegerField()
     year = models.IntegerField()
     month = models.IntegerField()
-    week = models.IntegerField()

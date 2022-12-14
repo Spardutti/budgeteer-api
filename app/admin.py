@@ -24,7 +24,7 @@ class WeeklyExpenseAdmin(admin.ModelAdmin):
         ('Category', {'fields': ['weekly_category']}),
         ('Amount', {'fields':['amount']})
     ]
-    list_display = ('amount', 'user', 'weekly_category')
+    list_display = ('id', 'amount', 'user', 'weekly_category')
     list_filter = ['user', 'weekly_category']
 
 class MonthlyIncomeAdmin(admin.ModelAdmin):
@@ -32,11 +32,10 @@ class MonthlyIncomeAdmin(admin.ModelAdmin):
         ('Id', {'fields': ['id']}),
         ('User', {'fields': ['user']}),
         ('Amount', {'fields': ['amount']}),
-        ('Week', {'fields':['week']}),
         ('Month', {'fields':['month']}),
         ('Year', {'fields':['year']})
     ]
-    list_display = ('id', 'user', 'amount', 'week', 'month', 'year')
+    list_display = ('id', 'user', 'amount',  'month', 'year')
     
 admin.site.register(CustomUser, UserAdmin)
 admin.site.register(WeeklyCategory, WeeklyCategoryAdmin)
