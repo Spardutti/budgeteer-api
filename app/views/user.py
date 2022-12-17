@@ -15,11 +15,12 @@ class UserSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     queryset = CustomUser.objects.all()
 
-    def retrieve(self, request, *args, **kwargs):
+    def retrieve(self, request, pk):
         serializer = self.get_serializer(self.get_object())
         user = self.get_object()
-        create_monthly_income_login(user.id, user.amount)
-        create_weekly_category_login(user)
+        if not user.is_superuser:
+            create_monthly_income_login(user.id, user.amount)
+            create_weekly_category_login(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def destroy(self, *args, **kwargs):

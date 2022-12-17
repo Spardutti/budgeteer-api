@@ -2,48 +2,70 @@ version: "3.3"
 
 services:
 
-    db:
-        image: postgres:12.8-alpine
+    # db:
+    #     image: postgres:12.8-alpine
+    #     restart: always
+    #     # env_file:  
+    #     #     - .env
+    #     volumes:
+    #     #     - ./database/:/docker-entrypoint-initdb.d
+    #         # - db_data:/var/lib/postgresql/data
+    #         - ./pg_seed:/pg_seed
+    #     environment:
+    #         POSTGRES_USER: "{DB_USER}"
+    #         POSTGRES_PASSWORD: "{DB_PASSWORD}"
+    #         POSTGRES_DB: "{DB_NAME}"
+    #     ports:
+    #         - 5432:5432
+    
+    # version: '3.8'
+    # services:
+    budgeteer_db:
+        image: postgres:14.1-alpine
         restart: always
-        # env_file: # - .env
-
         environment:
-            POSTGRES_USER: "{DB_USER}"
-            POSTGRES_PASSWORD: "{DB_PASSWORD}"
-            POSTGRES_DB: "{DB_NAME}"
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_DB=Budgeteer
+        # - DB_NAME=Budgeteer
         ports:
-            - 5432:5432
+        - '5432:5432'
+        volumes: 
+        - db:/var/lib/postgresql/data
+    # app:
+    #     # env_file: # - .env
+    #     build:
+    #         context: .
+    #         dockerfile: ./Dockerfile
+    #     command: sh -c "python manage.py  runserver 0.0.0.0:5000"
+        
+    #     ports:
+    #         - 5000:5000
+    #         # depends_on:
+    #         #   - db
+            
+    #     volumes:
+    #         - .:/app
+    #     environment:
+    #         PYTHONPATH: /app
+       
+    #     stdin_open: true
+    #     tty: true
+volumes:
+    db:
+        driver: local
+   
 
    
 
-    app:
-        # env_file: # - .env
-        build:
-            context: .
-            dockerfile: ./Dockerfile
-        command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
-        
-        ports:
-            - 8000:8000
-            # depends_on:
-            #   - db
-            
-        volumes:
-            - .:/app
-        environment:
-            PYTHONPATH: /app
-       
-        stdin_open: true
-        tty: true
-
-    celery-worker:
-        # env_file:
-        #   - .env
-        build:
-            context: .
-            dockerfile: ./Dockerfile
-        command: celery -A budgeteer worker --loglevel=INFO 
-        depends_on:
-            - app
-        volumes:
-            - .:/app
+    # celery-worker:
+    #     # env_file:
+    #     #   - .env
+    #     build:
+    #         context: .
+    #         dockerfile: ./Dockerfile
+    #     command: celery -A budgeteer worker --loglevel=INFO 
+    #     depends_on:
+    #         - app
+    #     volumes:
+    #         - .:/app
