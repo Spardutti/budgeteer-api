@@ -5,7 +5,7 @@ from .serializers import WeeklyExpenseSerializer, MonthlyIncomeSerializer, Weekl
 from datetime import datetime
 from .utils import week_of_month
 from datetime import datetime
-from .models import MonthlyIncome, WeeklyCategory, WeeklyExpense
+from .models import MonthlyIncome, WeeklyCategory, WeeklyExpense, CustomUser
 
 # @shared_task
 def create_weekly_expense(user_id, category_id):
@@ -31,7 +31,7 @@ def create_monthly_income(user_id, user_amount):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # @shared_task
-def update_expense_income_amount(category_id,  category_year, category_month, amount):
+def update_expense_income_amount(category_id,  category_year, category_month, amount, user_id):
     weekly_expense = WeeklyExpense.objects.filter(weekly_category=category_id).first()
     monthly_income = MonthlyIncome.objects.filter(user=weekly_expense.user.id,  year=category_year, month=category_month).first()
     weekly_expense.amount += amount

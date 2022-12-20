@@ -5,6 +5,7 @@ from ..models import MonthlyIncome
 from ..serializers import MonthlyIncomeSerializer
 from ..utils import get_auth_token
 from django.http import Http404
+from datetime import datetime
 
 
 class MonthlyIncomeSet(viewsets.ModelViewSet):
@@ -14,8 +15,29 @@ class MonthlyIncomeSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         monthly_income = MonthlyIncome.objects.filter(user=request.user.id)
-        seriazlier = self.get_serializer()
+        seriazlier = self.get_serializer(monthly_income, many=True)
         return Response(seriazlier.data, status=status.HTTP_200_OK)
+
+    def retrieve(self, request, pk):
+        today = datetime.now()
+        month = today.month
+        year = today.year
+        user_id = request.user.id
+        monthly_income = MonthlyIncome.objects.filter(year=year, month=month, user=user_id).first()
+        serializer = self.get_serializer(monthly_income)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def partial_update(self, request, *args, **kwargs):
+        today = datetime.now()
+        month = today.month
+        year = today.year
+        user_id = request.user.id
+        amount = request.data['amount']
+        monthly_income = MonthlyIncome.objects.filter(year=year, month=month, user=user_id).first()
+        monthly_income.amount -= amount
+        serializer = self.get_serializer(monthly_income, partial=True)
+        monthly_income.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 # class MonthlyIncomeList(APIView):
 #     permission_classes = [permissions.IsAuthenticatedOrReadOnly]

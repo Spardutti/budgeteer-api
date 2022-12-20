@@ -21,10 +21,11 @@ class WeeklyCategorySet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['get'])
-    def monthly(self, request, *args, **kwargs):
-        data = json.loads(request.body)
-        categories = WeeklyCategory.objects.filter(month=data['month'], year=data['year'], user=request.user.id)
-        serializer = self.get_serializer(self.get_object())
+    def monthly(self, request,  *args, **kwargs):
+        month = request.query_params.get('month')
+        year = request.query_params.get('year')
+        categories = WeeklyCategory.objects.filter(month=month, year=year, user=request.user.id)
+        serializer = self.get_serializer(categories, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request):
@@ -47,9 +48,9 @@ class WeeklyCategorySet(viewsets.ModelViewSet):
         try:
             category = self.get_object()
             data = json.loads(request.body)
-            category.amount += data['amount']
+            category.amount += int(data['amount'])
             # update_expense_income_amount.delay(category_id=category.id, category_week=category.week, category_year=category.year, category_month=category.month, amount=request.data['amount'])
-            update_expense_income_amount(category_id=category.id,  category_year=category.year, category_month=category.month, amount=data['amount'])
+            update_expense_income_amount(category_id=category.id,  category_year=category.year, category_month=category.month, amount=int(data['amount']), user_id=request.user.id)
             serializer = self.get_serializer(category, partial=True)
             category.save()
             return Response(serializer.data, status=status.HTTP_200_OK)

@@ -22,7 +22,7 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r'categories', views.WeeklyCategorySet, basename='categories')
-router.register(r'users', views.UserSet)
+router.register(r'users', views.UserSet, basename="users")
 router.register(r'weeklyexpense', views.WeeklyExpenseSet)
 router.register(r'monthlyincome', views.MonthlyIncomeSet)
 
