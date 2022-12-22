@@ -46,11 +46,10 @@ def create_monthly_income_login(user_id, user_amount):
     today = datetime.now()
     month = today.month
     year = today.year
-    week = week_of_month()
     
     montly_income = MonthlyIncome.objects.filter(user=user_id, year=year, month=month).first()
     if montly_income is None:
-        data = { 'year':year, 'month': month, 'week': week, 'amount': user_amount if user_amount else 0 }
+        data = { 'year':year, 'month': month, 'amount': user_amount if user_amount else 0 }
         context = {'user': user_id,}
         serializer = MonthlyIncomeSerializer(data=data, context=context)
         if serializer.is_valid():

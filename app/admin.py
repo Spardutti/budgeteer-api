@@ -5,8 +5,9 @@ from django.contrib import admin
 # Register your models here.
 
 class UserAdmin(admin.ModelAdmin):
-    fields = ['username', 'is_staff', 'is_superuser', ]
-    list_filter = ['username']
+    fields = ['username', 'amount', 'is_staff', 'is_superuser', ]
+    list_filter = ['username', 'amount']
+    list_display = ['username', 'amount']
 
 class WeeklyCategoryAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -29,7 +30,7 @@ class WeeklyExpenseAdmin(admin.ModelAdmin):
 
 class MonthlyIncomeAdmin(admin.ModelAdmin):
     fieldsets =  [
-        ('Id', {'fields': ['id']}),
+       
         ('User', {'fields': ['user']}),
         ('Amount', {'fields': ['amount']}),
         ('Month', {'fields':['month']}),

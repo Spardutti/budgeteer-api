@@ -19,13 +19,6 @@ class UserSet(viewsets.ModelViewSet):
     def partial_update(self, request, *args, **kwargs):
         try:
             user = request.user
-            if user.amount == 0:
-                today = datetime.now()
-                month = today.month
-                year = today.year
-                monthly_income = MonthlyIncome.objects.filter(month=month, year=year, user=request.user.id).first()
-                monthly_income.amount = request.data['amount']
-                monthly_income.save()
             user.amount = request.data['amount']
             serializer = self.get_serializer(user, partial=True)
             user.save()

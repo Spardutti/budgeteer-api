@@ -27,15 +27,18 @@ class MonthlyIncomeSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(monthly_income)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def partial_update(self, request, *args, **kwargs):
+    def partial_update(self, request, pk=None):
         today = datetime.now()
         month = today.month
         year = today.year
         user_id = request.user.id
-        amount = request.data['amount']
+        amount = int(request.data['amount'])
         monthly_income = MonthlyIncome.objects.filter(year=year, month=month, user=user_id).first()
-        monthly_income.amount -= amount
-        serializer = self.get_serializer(monthly_income, partial=True)
+        if monthly_income.amount == 0:
+            monthly_income.amount = amount
+        else:
+            monthly_income.amount -= amount
+        serializer = self.get_serializer(monthly_income)
         monthly_income.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
