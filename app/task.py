@@ -5,7 +5,7 @@ from .serializers import WeeklyExpenseSerializer, MonthlyIncomeSerializer, Weekl
 from datetime import datetime
 from .utils import week_of_month
 from datetime import datetime
-from .models import MonthlyIncome, WeeklyCategory, WeeklyExpense, CustomUser
+from .models import MonthlyIncome, WeeklyCategory, WeeklyExpense
 
 # @shared_task
 def create_weekly_expense(user_id, category_id):
@@ -22,7 +22,7 @@ def create_monthly_income(user_id, user_amount):
     year = today.year
     month = today.month
     week = week_of_month()
-    data = {'amount': user_amount, 'year': year, 'month': month, 'week': week}
+    data = {'amount': user_amount,'account_balance': user_amount, 'year': year, 'month': month, 'week': week}
     context = {'user': user_id}
     serializer = MonthlyIncomeSerializer(data=data, context=context)
     if serializer.is_valid():
@@ -36,6 +36,7 @@ def update_expense_income_amount(category_id,  category_year, category_month, am
     monthly_income = MonthlyIncome.objects.filter(user=weekly_expense.user.id,  year=category_year, month=category_month).first()
     weekly_expense.amount += amount
     monthly_income.amount -=amount
+    monthly_income.account_balance -= amount
 
     weekly_expense.save()
     monthly_income.save()
@@ -49,7 +50,7 @@ def create_monthly_income_login(user_id, user_amount):
     
     montly_income = MonthlyIncome.objects.filter(user=user_id, year=year, month=month).first()
     if montly_income is None:
-        data = { 'year':year, 'month': month, 'amount': user_amount if user_amount else 0 }
+        data = { 'year':year, 'month': month, 'amount': user_amount if user_amount else 0, 'account_balance': user_amount if user_amount else 0 }
         context = {'user': user_id,}
         serializer = MonthlyIncomeSerializer(data=data, context=context)
         if serializer.is_valid():

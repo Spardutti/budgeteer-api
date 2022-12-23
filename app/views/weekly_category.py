@@ -1,13 +1,11 @@
 from rest_framework import status, permissions, viewsets
-from rest_framework.decorators import APIView, action
+from rest_framework.decorators import  action
 from rest_framework.response import Response
-from ..models import WeeklyCategory, WeeklyExpense, MonthlyIncome
+from ..models import WeeklyCategory
 from ..serializers import WeeklyCategorySerializer
 from ..utils import get_auth_token
-from django.http import Http404
-from ..task import update_expense_income_amount, week_of_month
+from ..task import update_expense_income_amount
 import json
-from datetime import datetime
 
 class WeeklyCategorySet(viewsets.ModelViewSet):
     permission_classes = [ permissions.IsAuthenticatedOrReadOnly]

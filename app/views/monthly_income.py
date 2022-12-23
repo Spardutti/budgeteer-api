@@ -1,10 +1,9 @@
 from rest_framework import status, permissions, viewsets
-from rest_framework.decorators import APIView, action
+from rest_framework.decorators import  action
 from rest_framework.response import Response
 from ..models import MonthlyIncome
 from ..serializers import MonthlyIncomeSerializer
-from ..utils import get_auth_token
-from django.http import Http404
+
 from datetime import datetime
 
 
@@ -27,6 +26,19 @@ class MonthlyIncomeSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(monthly_income)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @action(["PATCH"], detail=True)
+    def account_balance(self, request, pk=None):
+        today = datetime.now()
+        month = today.month
+        year = today.year
+        user_id = request.user.id
+        account_balance = int(request.data['account_balance'])
+        monthly_income = MonthlyIncome.objects.filter(year=year, month=month, user=user_id).first()
+        monthly_income.account_balance = account_balance
+        serializer = self.get_serializer(monthly_income)
+        monthly_income.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def partial_update(self, request, pk=None):
         today = datetime.now()
         month = today.month
@@ -38,6 +50,12 @@ class MonthlyIncomeSet(viewsets.ModelViewSet):
             monthly_income.amount = amount
         else:
             monthly_income.amount -= amount
+        if request.data['account_balance']:
+            balance = int(request.data['account_balance'])
+            if monthly_income.account_balance == 0:
+                monthly_income.account_balance = balance
+            else:
+                monthly_income.account_balance -= balance
         serializer = self.get_serializer(monthly_income)
         monthly_income.save()
         return Response(serializer.data, status=status.HTTP_200_OK)

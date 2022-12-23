@@ -33,10 +33,11 @@ class MonthlyIncomeAdmin(admin.ModelAdmin):
        
         ('User', {'fields': ['user']}),
         ('Amount', {'fields': ['amount']}),
+        ('Balance', {'fields': ['account_balance']}),
         ('Month', {'fields':['month']}),
         ('Year', {'fields':['year']})
     ]
-    list_display = ('id', 'user', 'amount',  'month', 'year')
+    list_display = ('id', 'user', 'amount', 'account_balance', 'month', 'year')
     
 admin.site.register(CustomUser, UserAdmin)
 admin.site.register(WeeklyCategory, WeeklyCategoryAdmin)
