@@ -3,6 +3,7 @@ import math
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
+
 def week_of_month():
     date = datetime.now()
     week_day = date.weekday()
@@ -14,4 +15,6 @@ jwt_auth = JWTAuthentication()
 def get_auth_token( request):
         token = jwt_auth.authenticate(request)[0]
         return token
+
+
     

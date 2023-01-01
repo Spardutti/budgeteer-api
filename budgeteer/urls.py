@@ -17,27 +17,23 @@ from django.contrib import admin
 from django.urls import path, include
 from app import views
 from rest_framework.urlpatterns import format_suffix_patterns
-from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView) 
+from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView)
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register(r'categories', views.WeeklyCategorySet, basename='categories')
+router.register(r'users', views.UserSet, basename="users")
+router.register(r'weeklyexpense', views.WeeklyExpenseSet)
+router.register(r'monthlyincome', views.MonthlyIncomeSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    # Users
-    path('users/', views.UserList.as_view()),
-    path('user/', views.UserDetail.as_view()),
-    # Categories
-    path('categories/', views.WeeklyCategoryList.as_view()),
-    path('category/<int:pk>', views.WeeklyCategoryDetail.as_view()),
-    # Expenses
-    path('expenses/', views.WeeklyExpenseList.as_view()),
-    # Monthly Income
-    path('income/', views.MonthlyIncomeList.as_view()),
-    path('income/<int:pk>', views.MonthlyIncomeDetail.as_view()),
-    # Token
     path("token/", TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-
-    # LOGIN
-    path('auth/', include('rest_framework.urls'))
+    path('auth/', include('rest_framework.urls')),
 ]
 
-urlpatterns = format_suffix_patterns(urlpatterns)
+urlpatterns += router.urls
+
+
+

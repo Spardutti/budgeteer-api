@@ -22,7 +22,7 @@ def create_monthly_income(user_id, user_amount):
     year = today.year
     month = today.month
     week = week_of_month()
-    data = {'amount': user_amount, 'year': year, 'month': month, 'week': week}
+    data = {'amount': user_amount,'account_balance': user_amount, 'year': year, 'month': month, 'week': week}
     context = {'user': user_id}
     serializer = MonthlyIncomeSerializer(data=data, context=context)
     if serializer.is_valid():
@@ -31,11 +31,12 @@ def create_monthly_income(user_id, user_amount):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # @shared_task
-def update_expense_income_amount(category_id, category_week, category_year, category_month, amount):
-    weekly_expense = WeeklyExpense.objects.get(weekly_category=category_id)
-    monthly_income = MonthlyIncome.objects.get(user=weekly_expense.user.id, week=category_week, year=category_year, month=category_month)
+def update_expense_income_amount(category_id,  category_year, category_month, amount, user_id):
+    weekly_expense = WeeklyExpense.objects.filter(weekly_category=category_id).first()
+    monthly_income = MonthlyIncome.objects.filter(user=weekly_expense.user.id,  year=category_year, month=category_month).first()
     weekly_expense.amount += amount
     monthly_income.amount -=amount
+    monthly_income.account_balance -= amount
 
     weekly_expense.save()
     monthly_income.save()
@@ -46,11 +47,10 @@ def create_monthly_income_login(user_id, user_amount):
     today = datetime.now()
     month = today.month
     year = today.year
-    week = week_of_month()
     
     montly_income = MonthlyIncome.objects.filter(user=user_id, year=year, month=month).first()
     if montly_income is None:
-        data = { 'year':year, 'month': month, 'week': week, 'amount': user_amount if user_amount else 0 }
+        data = { 'year':year, 'month': month, 'amount': user_amount if user_amount else 0, 'account_balance': user_amount if user_amount else 0 }
         context = {'user': user_id,}
         serializer = MonthlyIncomeSerializer(data=data, context=context)
         if serializer.is_valid():

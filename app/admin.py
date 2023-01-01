@@ -5,8 +5,9 @@ from django.contrib import admin
 # Register your models here.
 
 class UserAdmin(admin.ModelAdmin):
-    fields = ['username', 'is_staff', 'is_superuser', ]
-    list_filter = ['username']
+    fields = ['username', 'amount', 'is_staff', 'is_superuser', ]
+    list_filter = ['username', 'amount']
+    list_display = ['username', 'amount']
 
 class WeeklyCategoryAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -14,7 +15,7 @@ class WeeklyCategoryAdmin(admin.ModelAdmin):
         ('Amount', {'fields': ['amount']}),
         ('Date', {'fields': ['year', 'month', 'week']})
     ]
-    list_display = ('name', 'user', 'amount', 'week')
+    list_display = ('name', 'user', 'amount', 'week', 'month', 'year')
 
     list_filter = ['name', 'user', 'week']
 
@@ -24,19 +25,19 @@ class WeeklyExpenseAdmin(admin.ModelAdmin):
         ('Category', {'fields': ['weekly_category']}),
         ('Amount', {'fields':['amount']})
     ]
-    list_display = ('amount', 'user', 'weekly_category')
+    list_display = ('id', 'amount', 'user', 'weekly_category')
     list_filter = ['user', 'weekly_category']
 
 class MonthlyIncomeAdmin(admin.ModelAdmin):
     fieldsets =  [
-        ('Id', {'fields': ['id']}),
+       
         ('User', {'fields': ['user']}),
         ('Amount', {'fields': ['amount']}),
-        ('Week', {'fields':['week']}),
+        ('Balance', {'fields': ['account_balance']}),
         ('Month', {'fields':['month']}),
         ('Year', {'fields':['year']})
     ]
-    list_display = ('id', 'user', 'amount', 'week', 'month', 'year')
+    list_display = ('id', 'user', 'amount', 'account_balance', 'month', 'year')
     
 admin.site.register(CustomUser, UserAdmin)
 admin.site.register(WeeklyCategory, WeeklyCategoryAdmin)

@@ -1,19 +1,19 @@
 FROM python:3.10-alpine
 
-RUN apk add --update \
-    --virtual build-dependencies \
-    bash \
-    postgresql-dev \
-    musl-dev \
-    python3-dev \
-    git \
-    curl-dev \
-    jpeg-dev \
-    libressl-dev \
-    libffi-dev \
-    gcc \
-    g++ \
-    libxslt-dev
+# RUN apk add --update \
+#     --virtual build-dependencies \
+#     bash \
+#     postgresql-dev \
+#     musl-dev \
+#     python3-dev \
+#     git \
+#     curl-dev \
+#     jpeg-dev \
+#     libressl-dev \
+#     libffi-dev \
+#     gcc \
+#     g++ \
+#     libxslt-dev
 
 WORKDIR /app
 COPY . /app/
@@ -28,6 +28,8 @@ ENV PYTHONPATH "${PYTHONPATH}:/app"
 
 # Install dependencies
 RUN pip install --no-cache-dir --upgrade pip
+RUN apk update
+RUN apk add postgresql-dev gcc python3-dev musl-dev
 
 COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
