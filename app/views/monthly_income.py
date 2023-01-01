@@ -43,6 +43,7 @@ class MonthlyIncomeSet(viewsets.ModelViewSet):
         account_balance = int(request.data['account_balance'])
         monthly_income = MonthlyIncome.objects.filter(year=year, month=month, user=user_id).first()
         monthly_income.account_balance = account_balance
+        print(account_balance)
         serializer = self.get_serializer(monthly_income)
         monthly_income.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
