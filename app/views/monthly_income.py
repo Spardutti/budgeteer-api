@@ -26,6 +26,14 @@ class MonthlyIncomeSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(monthly_income)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @action(detail=True, methods=['get'])
+    def monthly(self, request,  *args, **kwargs):
+        month = request.query_params.get('month')
+        year = request.query_params.get('year')
+        income = MonthlyIncome.objects.filter(month=month, year=year, user=request.user.id).first()
+        serializer = self.get_serializer(income)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     @action(["PATCH"], detail=True)
     def account_balance(self, request, pk=None):
         today = datetime.now()
@@ -59,36 +67,3 @@ class MonthlyIncomeSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(monthly_income)
         monthly_income.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-# class MonthlyIncomeList(APIView):
-#     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    
-#     def get(self, request, format=None):
-#         monthly_income = MonthlyIncome.objects.all()
-#         serializer = MonthlyIncomeSerializer(monthly_income, many=True)
-#         return Response(serializer.data, status=status.HTTP_200_OK)
-
-#     def post(self, request, format=None):
-#         token = get_auth_token(request)
-#         serializer = MonthlyIncomeSerializer(data=request.data, context=token)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# class MonthlyIncomeDetail(APIView):
-#     def get_income(self, pk):
-#         try:
-#             return MonthlyIncome.objects.get(pk=pk)
-#         except MonthlyIncome.DoesNotExist:
-#             return Http404
-    
-#     def put(self, request, pk, format=None):
-#         income = self.get_income(pk)
-#         serializer = MonthlyIncomeSerializer(income, data=request.data, partial=True)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_200_OK)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        

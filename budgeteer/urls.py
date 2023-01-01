@@ -31,27 +31,9 @@ urlpatterns = [
     path("token/", TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('auth/', include('rest_framework.urls')),
-#     # path('categories/', include(router.urls)),
-#     # Users
-#     path('users/', views.UserList.as_view()),
-#     path('user/', views.UserDetail.as_view()),
-#     # Categories
-#     # path('categories/', views.WeeklyCategoryList.as_view()),
-#     # path('category/<int:pk>', views.WeeklyCategoryDetail.as_view()),
-#     # Expenses
-#     path('expenses/', views.WeeklyExpenseList.as_view()),
-#     # Monthly Income
-#     path('income/', views.MonthlyIncomeList.as_view()),
-#     path('income/<int:pk>', views.MonthlyIncomeDetail.as_view()),
-#     # Token
-
-#     # LOGIN
 ]
 
 urlpatterns += router.urls
 
-# urlpatterns = format_suffix_patterns(urlpatterns)
-# urlpatterns.extend(
-#     path('', include(router.urls))
-# )
+
 
