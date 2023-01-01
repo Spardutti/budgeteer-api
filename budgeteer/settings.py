@@ -156,7 +156,8 @@ SIMPLE_JWT = {
 # Cors 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
-]
+    'https://spardutti.github.io'
+] 
 
 # Celery for windows
 os.environ.setdefault('FORKED_BY_MULTIPROCESSING', '1')
