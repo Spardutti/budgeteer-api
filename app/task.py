@@ -64,6 +64,7 @@ def create_weekly_category_login(user):
     month = today.month
     year = today.year
     week = week_of_month()
+    
     weekly_categories = WeeklyCategory.objects.filter(user=user)
     if len(weekly_categories) > 0:
         names_to_skip = []
