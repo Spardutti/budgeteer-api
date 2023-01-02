@@ -6,6 +6,7 @@ commands.txt# Created by https://www.toptal.com/developers/gitignore/api/python
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc 
 
 /__pycache__
 
