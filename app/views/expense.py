@@ -26,11 +26,3 @@ class ExpenseSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(expenses, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-## TODO get all expense of a specific month
-    # @action(detail=False, methods=['GET'])
-    # def category_expense(self, request):
-    #     category_id = request.query_params.get('id')
-    #     expenses = Expense.objects.filter(weekly_category=category_id)
-    #     serializer = self.get_serializer(expenses, many=True)
-    #     return Response(serializer.data, status=status.HTTP_200_OK)
-    #     #TODO we got the detail in postman!!
