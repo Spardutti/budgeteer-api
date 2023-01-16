@@ -14,7 +14,8 @@ class CategorySerializer(serializers.ModelSerializer):
         user = self.context
         name = validated_data['name']
         date = datetime.date.today()
-        data = {'user': user, 'date': date, 'name': name }
+        budget = validated_data.get('budget', 0)
+        data = {'user': user, 'date': date, 'name': name, 'budget': budget }
         category = Category.objects.create(**data)
         
         return category
